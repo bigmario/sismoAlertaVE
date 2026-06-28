@@ -1,0 +1,93 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum EstadoPersona {
+  DESAPARECIDO
+  RESCATADO
+  UBICADO
+  FALLECIDO
+}
+
+enum RolUsuario {
+  RESCATISTA
+  SUPERADMIN
+}
+
+model PersonaAfectada {
+  id                            String            @id @default(uuid())
+  cedula                        String?
+  nombre                        String
+  apellido                      String
+  edad                          Int?
+  ultimo_avistamiento_lat       Float?
+  ultimo_avistamiento_lng       Float?
+  ultimo_avistamiento_direccion String
+  estado                        EstadoPersona     @default(DESAPARECIDO)
+  descripcion_salud             String?
+  fotos                         String[]          @default([])
+  is_active                     Boolean           @default(true)
+  created_at                    DateTime          @default(now())
+  updated_at                    DateTime          @updatedAt
+  reportante_id                 String
+  reportante                    Reportante        @relation(fields: [reportante_id], references: [id])
+  historial_estados             HistorialEstado[]
+
+  @@index([nombre, apellido])
+  @@index([cedula])
+  @@index([estado, is_active])
+  @@index([created_at])
+}
+
+model Reportante {
+  id                 String            @id @default(uuid())
+  nombre             String
+  telefono           String
+  parentesco         String
+  is_active          Boolean           @default(true)
+  created_at         DateTime          @default(now())
+  updated_at         DateTime          @updatedAt
+  personas_afectadas PersonaAfectada[]
+}
+
+model HistorialEstado {
+  id              String          @id @default(uuid())
+  persona_id      String
+  persona         PersonaAfectada @relation(fields: [persona_id], references: [id])
+  estado_anterior EstadoPersona?
+  estado_nuevo    EstadoPersona
+  fuente          String
+  motivo          String?
+  autor_id        String?
+  autor_nombre    String
+  created_at      DateTime        @default(now())
+
+  @@index([persona_id])
+  @@index([created_at])
+}
+
+model Usuario {
+  id            String     @id @default(uuid())
+  nombre        String
+  email         String     @unique
+  password_hash String
+  rol           RolUsuario @default(RESCATISTA)
+  is_active     Boolean    @default(true)
+  created_at    DateTime   @default(now())
+  updated_at    DateTime   @updatedAt
+}
+
+model ApiKey {
+  id                  String   @id @default(uuid())
+  key_hash            String   @unique
+  nombre_organizacion String
+  is_active           Boolean  @default(true)
+  limite_rate         Int      @default(100)
+  created_at          DateTime @default(now())
+  updated_at          DateTime @updatedAt
+}
