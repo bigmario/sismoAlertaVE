@@ -70,25 +70,96 @@
         </keep-alive>
       </div>
 
-      <!-- Emergency Helpline sidebar / contacts section -->
-      <section class="bg-[#161F38]/60 border border-[#232F52] p-4 rounded-xl space-y-3">
-        <h3 class="text-xs font-bold uppercase tracking-wider text-brand-amber">📞 Números de Emergencia en Venezuela</h3>
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs">
-          <div class="p-2 bg-brand-dark/40 rounded border border-[#232F52]/50">
-            <strong class="block text-brand-text">Emergencia Nacional</strong>
-            <span class="text-brand-blue font-bold text-sm">911</span>
+      <!-- Emergency Helpline sidebar / contacts section (Updated from PC & Bomberos flyer) -->
+      <section class="bg-[#161F38] border-2 border-brand-red p-5 rounded-2xl space-y-5 shadow-2xl">
+        <!-- Title bar -->
+        <div class="flex items-center gap-3 border-b border-[#232F52] pb-3 text-brand-red">
+          <div class="text-2xl animate-pulse">⚠️</div>
+          <div>
+            <h3 class="text-sm font-black uppercase tracking-wider text-brand-text">NÚMEROS DE EMERGENCIA ACTUALIZADOS</h3>
+            <p class="text-[10px] text-brand-amber font-bold tracking-tight uppercase animate-pulse">ACABA DE TEMBLAR - MANTÉN LA CALMA Y COMUNÍCATE</p>
           </div>
-          <div class="p-2 bg-brand-dark/40 rounded border border-[#232F52]/50">
-            <strong class="block text-brand-text">Protección Civil</strong>
-            <span class="text-brand-blue font-bold text-sm">0800-7248451</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5 text-xs">
+          <!-- Nacional -->
+          <div class="space-y-2 p-3 bg-brand-dark/50 rounded-xl border border-[#232F52]">
+            <h4 class="font-bold text-brand-amber text-xs uppercase tracking-wide border-b border-[#232F52] pb-1">Nivel Nacional</h4>
+            <div class="space-y-2 mt-2">
+              <div>
+                <span class="text-[10px] text-brand-muted block">Emergencias Nacionales</span>
+                <a href="tel:911" class="text-xl font-black text-brand-text hover:text-brand-blue transition-colors flex items-center gap-1.5">
+                  📞 911
+                </a>
+              </div>
+              <div>
+                <span class="text-[10px] text-brand-muted block">Protección Civil Nacional</span>
+                <a href="tel:08007248451" class="text-sm font-bold text-brand-text hover:text-brand-blue transition-colors block">
+                  0800-PCIVIL-1
+                </a>
+                <span class="text-[10px] text-brand-muted">(0800-724-8451)</span>
+              </div>
+            </div>
           </div>
-          <div class="p-2 bg-brand-dark/40 rounded border border-[#232F52]/50">
-            <strong class="block text-brand-text">Bomberos Forestales</strong>
-            <span class="text-brand-blue font-bold text-sm">0800-5894226</span>
+
+          <!-- Caracas -->
+          <div class="space-y-2 p-3 bg-brand-dark/50 rounded-xl border border-[#232F52]">
+            <h4 class="font-bold text-brand-amber text-xs uppercase tracking-wide border-b border-[#232F52] pb-1">Caracas</h4>
+            <div class="space-y-2 mt-2">
+              <div>
+                <span class="text-[10px] text-brand-muted block font-semibold mb-1 text-brand-text">Protección Civil Distrito Capital</span>
+                <div class="grid grid-cols-2 gap-2 text-[11px] font-semibold text-brand-text">
+                  <a href="tel:02125751829" class="hover:text-brand-blue flex items-center gap-1">📞 575-1829</a>
+                  <a href="tel:02125753332" class="hover:text-brand-blue flex items-center gap-1">📞 575-3332</a>
+                  <a href="tel:02125751823" class="hover:text-brand-blue flex items-center gap-1">📞 575-1823</a>
+                  <a href="tel:02123774019" class="hover:text-brand-blue flex items-center gap-1">📞 377-4019</a>
+                </div>
+              </div>
+              <div class="pt-1">
+                <span class="text-[10px] text-brand-muted block">Bomberos de Caracas (Central)</span>
+                <a href="tel:02125454545" class="text-[11px] font-bold text-brand-text hover:text-brand-blue transition-colors flex items-center gap-1">
+                  📞 0212-545-4545
+                </a>
+              </div>
+            </div>
           </div>
-          <div class="p-2 bg-brand-dark/40 rounded border border-[#232F52]/50">
-            <strong class="block text-brand-text">Cruz Roja Venezuela</strong>
-            <span class="text-brand-blue font-bold text-sm">(0212) 571-4567</span>
+
+          <!-- Valencia / Carabobo -->
+          <div class="space-y-2 p-3 bg-brand-dark/50 rounded-xl border border-[#232F52]">
+            <h4 class="font-bold text-brand-amber text-xs uppercase tracking-wide border-b border-[#232F52] pb-1">Valencia / Carabobo</h4>
+            <div class="space-y-2 mt-2">
+              <div>
+                <span class="text-[10px] text-brand-muted block font-semibold mb-1 text-brand-text">Protección Civil Carabobo</span>
+                <div class="grid grid-cols-3 gap-1 text-[10px] font-semibold text-brand-text">
+                  <a href="tel:02418593969" class="hover:text-brand-blue">859-3969</a>
+                  <a href="tel:02418592171" class="hover:text-brand-blue">859-2171</a>
+                  <a href="tel:02418593801" class="hover:text-brand-blue">859-3801</a>
+                </div>
+              </div>
+              <div class="grid grid-cols-2 gap-2 pt-1 border-t border-[#232F52]/50 mt-1">
+                <div>
+                  <span class="text-[9px] text-brand-muted block">PC Valencia</span>
+                  <a href="tel:04128274252" class="text-[10px] font-bold text-brand-text hover:text-brand-blue">
+                    0412-827-4252
+                  </a>
+                </div>
+                <div>
+                  <span class="text-[9px] text-brand-muted block">Bomberos Val.</span>
+                  <a href="tel:04144333952" class="text-[10px] font-bold text-brand-text hover:text-brand-blue">
+                    0414-433-3952
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Importance Banner -->
+        <div class="bg-brand-red/10 border border-brand-red/30 p-3.5 rounded-xl flex items-start gap-3">
+          <span class="text-lg text-brand-red">⚠️</span>
+          <div class="text-[11px] leading-relaxed">
+            <strong class="text-brand-red font-black uppercase block mb-0.5">IMPORTANTE:</strong>
+            Si estás en un edificio con grietas nuevas, olor a gas, cables caídos o daños estructurales, <span class="underline decoration-brand-red font-semibold text-brand-text">evacúa con calma</span> y repórtalo de inmediato a Protección Civil o Bomberos.
           </div>
         </div>
       </section>
