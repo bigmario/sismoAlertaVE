@@ -169,7 +169,7 @@
               <input
                 v-model.number="form.ultimo_avistamiento_lat"
                 type="number"
-                step="0.000001"
+                step="any"
                 class="w-full bg-[#0A0F1D] text-brand-text placeholder-brand-muted px-2.5 py-1.5 rounded border border-[#2A3B66] focus:outline-none focus:ring-1 focus:ring-brand-blue"
                 placeholder="10.4806"
               />
@@ -179,7 +179,7 @@
               <input
                 v-model.number="form.ultimo_avistamiento_lng"
                 type="number"
-                step="0.000001"
+                step="any"
                 class="w-full bg-[#0A0F1D] text-brand-text placeholder-brand-muted px-2.5 py-1.5 rounded border border-[#2A3B66] focus:outline-none focus:ring-1 focus:ring-brand-blue"
                 placeholder="-66.9036"
               />
