@@ -128,7 +128,12 @@
                   loading="lazy"
                 />
                 <div class="min-w-0">
-                  <h4 class="font-bold text-brand-text text-xs truncate">{{ persona.nombre }} {{ persona.apellido }}</h4>
+                  <h4 class="font-bold text-brand-text text-xs truncate flex items-center gap-1.5">
+                    {{ persona.nombre }} {{ persona.apellido }}
+                    <span v-if="persona.es_menor_no_acompanado" class="text-[8px] bg-red-600/20 text-brand-red border border-red-500/30 px-1 rounded font-bold uppercase tracking-wider">
+                      🧒 Solo
+                    </span>
+                  </h4>
                   <p class="text-[10px] text-brand-muted">C.I. {{ persona.cedula || 'Sin Cédula' }} | ID: {{ persona.id.substring(0,8) }}</p>
                   <p class="text-[10px] text-brand-muted truncate">{{ persona.ultimo_avistamiento_direccion }}</p>
                 </div>
@@ -165,12 +170,24 @@
             <!-- Active Selection Action Sheet -->
             <div v-else class="space-y-4">
               <!-- Selected Target Summary -->
-              <div class="bg-brand-dark p-3 rounded-lg border border-[#232F52] flex items-center gap-3">
-                <img :src="selectedCase.fotos[0]" class="w-10 h-10 rounded-lg object-cover" />
-                <div class="min-w-0">
-                  <span class="text-[10px] text-brand-muted uppercase font-bold block">Modificando registro de</span>
-                  <span class="font-bold text-brand-text text-xs block truncate">{{ selectedCase.nombre }} {{ selectedCase.apellido }}</span>
-                  <span class="text-[10px] text-brand-muted">Estado actual: <strong class="text-brand-text">{{ selectedCase.estado }}</strong></span>
+              <div class="bg-brand-dark p-3 rounded-lg border border-[#232F52] flex items-center justify-between gap-3">
+                <div class="flex items-center gap-3">
+                  <img :src="selectedCase.fotos[0]" class="w-10 h-10 rounded-lg object-cover" />
+                  <div class="min-w-0">
+                    <span class="text-[10px] text-brand-muted uppercase font-bold block">Modificando registro de</span>
+                    <span class="font-bold text-brand-text text-xs block truncate">{{ selectedCase.nombre }} {{ selectedCase.apellido }}</span>
+                    <span class="text-[10px] text-brand-muted">Estado actual: <strong class="text-brand-text">{{ selectedCase.estado }}</strong></span>
+                  </div>
+                </div>
+                <!-- Checkbox to toggle es_menor_no_acompanado -->
+                <div class="flex items-center gap-1.5 p-2 bg-[#1A121F] rounded-lg border border-brand-red/30 flex-shrink-0">
+                  <input
+                    type="checkbox"
+                    v-model="selectedCase.es_menor_no_acompanado"
+                    @change="toggleMenorFlagInDB"
+                    class="w-3.5 h-3.5 rounded text-brand-red bg-[#0A0F1D] border-[#2A3B66] focus:ring-brand-red focus:ring-opacity-50 cursor-pointer"
+                  />
+                  <span class="text-[9px] font-bold text-brand-red uppercase tracking-wide">🧒 Solo</span>
                 </div>
               </div>
 
@@ -381,6 +398,17 @@ const selectCase = (persona: PersonaAfectada) => {
   const tmpls = getReasonTemplates(persona.estado);
   quickReason.value = tmpls[0] || '';
   actionError.value = '';
+};
+
+const toggleMenorFlagInDB = () => {
+  if (!selectedCase.value) return;
+  const list = apiService.getPersonas();
+  const index = list.findIndex(p => p.id === selectedCase.value!.id);
+  if (index !== -1) {
+    list[index].es_menor_no_acompanado = selectedCase.value!.es_menor_no_acompanado;
+    list[index].updated_at = new Date().toISOString();
+    apiService.savePersonas(list);
+  }
 };
 
 const cancelSelection = () => {

@@ -1,5 +1,5 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsOptional, IsString, IsEnum, IsInt, Min } from 'class-validator';
+import { IsOptional, IsString, IsEnum, IsInt, Min, IsBoolean } from 'class-validator';
 import { Type } from 'class-transformer';
 import { EstadoPersona } from '@prisma/client';
 
@@ -20,6 +20,15 @@ export class SearchQueryDto {
   @IsEnum(EstadoPersona)
   @IsOptional()
   estado?: EstadoPersona;
+
+  @ApiPropertyOptional({
+    description: 'Filtrar por menores de edad no acompañados (separados de sus padres)',
+    example: true,
+  })
+  @Type(() => Boolean)
+  @IsBoolean()
+  @IsOptional()
+  es_menor_no_acompanado?: boolean;
 
   @ApiPropertyOptional({
     description: 'Número de página para paginación (basado en 1)',

@@ -37,11 +37,13 @@ model PersonaAfectada {
   reportante_id                 String
   reportante                    Reportante        @relation(fields: [reportante_id], references: [id])
   historial_estados             HistorialEstado[]
+  es_menor_no_acompanado        Boolean           @default(false)
 
   @@index([nombre, apellido])
   @@index([cedula])
   @@index([estado, is_active])
   @@index([created_at])
+  @@index([es_menor_no_acompanado, is_active])
 }
 
 model Reportante {

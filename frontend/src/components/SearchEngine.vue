@@ -96,6 +96,19 @@
           <span class="w-1.5 h-1.5 rounded-full bg-zinc-500"></span>
           Fallecidos ({{ getCount('FALLECIDO') }})
         </button>
+
+        <button
+          @click="toggleMenoresFilter"
+          :class="[
+            'px-3 py-1.5 rounded-lg text-xs font-bold transition-all border flex items-center gap-1.5 ml-auto md:ml-0',
+            showOnlyMenores
+              ? 'bg-red-950/85 text-brand-red border-red-600/60 shadow-lg shadow-brand-red/10'
+              : 'bg-[#0A0F1D] text-brand-muted border-transparent hover:border-brand-red/40 hover:text-brand-red'
+          ]"
+        >
+          <span>🧒</span>
+          <span>Menores No Acompañados ({{ getMenoresCount() }})</span>
+        </button>
       </div>
     </div>
 
@@ -135,6 +148,9 @@
               </span>
               <span v-if="persona.edad" class="text-xs text-brand-muted bg-brand-dark px-1.5 py-0.5 rounded border border-[#232F52]">
                 {{ persona.edad }} años
+              </span>
+              <span v-if="persona.es_menor_no_acompanado" class="text-[9px] bg-red-600/20 text-brand-red border border-red-500/30 px-1.5 py-0.5 rounded font-bold uppercase tracking-wider">
+                Menor No Acompañado
               </span>
             </div>
             <p v-if="persona.cedula" class="text-xs text-brand-muted">
@@ -216,9 +232,14 @@
           <!-- Status Banner -->
           <div class="flex items-center justify-between p-3 rounded-xl bg-brand-dark/40 border border-[#232F52]">
             <span class="text-xs text-brand-muted font-medium">Estado Actual:</span>
-            <span :class="getStatusBadgeClass(selectedPersona.estado)">
-              {{ selectedPersona.estado }}
-            </span>
+            <div class="flex gap-2">
+              <span v-if="selectedPersona.es_menor_no_acompanado" class="bg-red-600/20 text-brand-red border border-red-500/30 px-2 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider">
+                Menor No Acompañado
+              </span>
+              <span :class="getStatusBadgeClass(selectedPersona.estado)">
+                {{ selectedPersona.estado }}
+              </span>
+            </div>
           </div>
 
           <!-- Basic Metadata -->
@@ -332,6 +353,7 @@ import { apiService, type PersonaAfectada } from '../services/api';
 const personas = ref<PersonaAfectada[]>([]);
 const searchQuery = ref('');
 const statusFilter = ref<'ALL' | PersonaAfectada['estado']>('ALL');
+const showOnlyMenores = ref(false);
 const selectedPersona = ref<PersonaAfectada | null>(null);
 
 // Fetch data from local storage
@@ -353,6 +375,7 @@ onUnmounted(() => {
 const clearFilters = () => {
   searchQuery.value = '';
   statusFilter.value = 'ALL';
+  showOnlyMenores.value = false;
 };
 
 // Filter personas based on search query and status filter
@@ -360,6 +383,11 @@ const filteredPersonas = computed(() => {
   return personas.value.filter(p => {
     // Status Filter
     if (statusFilter.value !== 'ALL' && p.estado !== statusFilter.value) {
+      return false;
+    }
+
+    // Unaccompanied minors filter
+    if (showOnlyMenores.value && !p.es_menor_no_acompanado) {
       return false;
     }
 
@@ -384,6 +412,14 @@ const filteredPersonas = computed(() => {
 // Count status for badge displays
 const getCount = (status: PersonaAfectada['estado']) => {
   return personas.value.filter(p => p.estado === status).length;
+};
+
+const getMenoresCount = () => {
+  return personas.value.filter(p => p.es_menor_no_acompanado).length;
+};
+
+const toggleMenoresFilter = () => {
+  showOnlyMenores.value = !showOnlyMenores.value;
 };
 
 // Open details popup

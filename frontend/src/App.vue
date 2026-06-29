@@ -41,7 +41,7 @@
     <main class="flex-grow max-w-6xl w-full mx-auto px-4 py-6 space-y-6">
       
       <!-- Real-time Stats Grid Dashboard -->
-      <section class="grid grid-cols-2 md:grid-cols-4 gap-3 bg-[#111A31]/50 p-3 rounded-xl border border-[#232F52]/60">
+      <section class="grid grid-cols-2 md:grid-cols-5 gap-3 bg-[#111A31]/50 p-3 rounded-xl border border-[#232F52]/60">
         <div class="bg-[#161F38] p-3.5 rounded-lg border border-[#232F52] flex flex-col justify-between">
           <span class="text-[10px] text-brand-muted font-bold uppercase tracking-wider">Casos Totales</span>
           <span class="text-2xl font-black text-brand-text mt-1">{{ stats.total }}</span>
@@ -60,6 +60,15 @@
         <div class="bg-[#161F38] p-3.5 rounded-lg border border-[#232F52] flex flex-col justify-between">
           <span class="text-[10px] text-cyan-400 font-bold uppercase tracking-wider">Ubicados</span>
           <span class="text-2xl font-black text-cyan-400 mt-1">{{ stats.ubicados }}</span>
+        </div>
+        <div class="bg-[#161F38] p-3.5 rounded-lg border border-[#232F52] flex flex-col justify-between">
+          <span class="text-[10px] text-brand-red font-bold uppercase tracking-wider flex items-center gap-1">
+            🧒 Menores Solos
+          </span>
+          <span class="text-2xl font-black text-brand-red mt-1 flex items-baseline gap-1">
+            {{ stats.menores }}
+            <span class="text-[9px] text-brand-muted font-normal block">prioridad</span>
+          </span>
         </div>
       </section>
 
@@ -206,7 +215,8 @@ const stats = ref({
   total: 0,
   desaparecidos: 0,
   rescatados: 0,
-  ubicados: 0
+  ubicados: 0,
+  menores: 0
 });
 
 const calculateStats = () => {
@@ -215,7 +225,8 @@ const calculateStats = () => {
     total: records.length,
     desaparecidos: records.filter(p => p.estado === 'DESAPARECIDO').length,
     rescatados: records.filter(p => p.estado === 'RESCATADO').length,
-    ubicados: records.filter(p => p.estado === 'UBICADO').length
+    ubicados: records.filter(p => p.estado === 'UBICADO').length,
+    menores: records.filter(p => p.es_menor_no_acompanado).length
   };
 };
 

@@ -7,6 +7,7 @@ import {
   IsArray,
   ValidateNested,
   IsNotEmpty,
+  IsBoolean,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
@@ -73,6 +74,11 @@ export class CreatePersonaAfectadaDto {
   @IsString({ each: true })
   @IsOptional()
   fotos?: string[];
+
+  @ApiPropertyOptional({ description: 'Indica si es un menor de edad no acompañado (separado de sus padres)', default: false, example: false })
+  @IsBoolean()
+  @IsOptional()
+  es_menor_no_acompanado?: boolean;
 
   @ApiProperty({ description: 'Datos de quien reporta' })
   @ValidateNested()

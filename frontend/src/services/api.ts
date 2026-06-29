@@ -32,6 +32,7 @@ export interface PersonaAfectada {
   updated_at: string;
   reportante: Reportante;
   historial_estados?: HistorialEstado[];
+  es_menor_no_acompanado?: boolean;
 }
 
 const INITIAL_MOCK_DATA: PersonaAfectada[] = [];

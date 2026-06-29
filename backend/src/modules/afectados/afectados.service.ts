@@ -37,6 +37,7 @@ export class AfectadosService {
         fotos: createDto.fotos || [],
         estado: EstadoPersona.DESAPARECIDO, // Por defecto se registra como desaparecido
         reportante_id: reportante.id,
+        es_menor_no_acompanado: createDto.es_menor_no_acompanado || false,
       },
     });
 
@@ -54,7 +55,7 @@ export class AfectadosService {
   }
 
   async search(searchDto: SearchQueryDto) {
-    const { q, estado, page = 1, limit = 10 } = searchDto;
+    const { q, estado, es_menor_no_acompanado, page = 1, limit = 10 } = searchDto;
     const skip = (page - 1) * limit;
 
     const where: Prisma.PersonaAfectadaWhereInput = {
@@ -63,6 +64,10 @@ export class AfectadosService {
 
     if (estado) {
       where.estado = estado;
+    }
+
+    if (es_menor_no_acompanado !== undefined) {
+      where.es_menor_no_acompanado = es_menor_no_acompanado;
     }
 
     if (q) {

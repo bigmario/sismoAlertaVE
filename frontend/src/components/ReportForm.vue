@@ -97,6 +97,23 @@
           </div>
         </div>
 
+        <!-- Checkbox Menor No Acompañado -->
+        <div class="bg-brand-red/10 border border-brand-red/30 p-4 rounded-xl space-y-2">
+          <label class="flex items-center gap-2.5 cursor-pointer">
+            <input
+              v-model="form.es_menor_no_acompanado"
+              type="checkbox"
+              class="w-4 h-4 rounded text-brand-red bg-[#0A0F1D] border-[#2A3B66] focus:ring-brand-red focus:ring-opacity-50"
+            />
+            <span class="text-xs font-bold text-brand-red uppercase tracking-wider flex items-center gap-1.5">
+              🧒 Menor de Edad No Acompañado (Niño/Niña Solo)
+            </span>
+          </label>
+          <p class="text-[11px] text-brand-muted leading-relaxed">
+            Marque esta casilla **únicamente** si el reporte corresponde a un niño, niña o adolescente localizado/rescatado solo, extraviado o separado de sus representantes legales en la zona de desastre. Esto activará una alerta prioritaria para facilitar su reunificación familiar.
+          </p>
+        </div>
+
         <!-- Dirección de Último Avistamiento -->
         <div>
           <label class="block text-xs font-semibold text-brand-text mb-1">Último Lugar de Avistamiento / Estado de Venezuela *</label>
@@ -304,6 +321,7 @@ interface FormState {
   reportante_nombre: string;
   reportante_telefono: string;
   reportante_parentesco: string;
+  es_menor_no_acompanado: boolean;
 }
 
 const initialForm = (): FormState => ({
@@ -319,7 +337,8 @@ const initialForm = (): FormState => ({
   fotoUrl: '',
   reportante_nombre: '',
   reportante_telefono: '',
-  reportante_parentesco: ''
+  reportante_parentesco: '',
+  es_menor_no_acompanado: false
 });
 
 const form = ref<FormState>(initialForm());
@@ -446,6 +465,7 @@ const handleSubmit = () => {
     estado: 'DESAPARECIDO', // default state when first reported
     descripcion_salud: form.value.descripcion_salud.trim() || undefined,
     fotos: form.value.fotoUrl.trim() ? [form.value.fotoUrl.trim()] : [],
+    es_menor_no_acompanado: form.value.es_menor_no_acompanado,
     reportante: {
       nombre: form.value.reportante_nombre.trim(),
       telefono: form.value.reportante_telefono.trim(),
