@@ -194,6 +194,21 @@ fetch('http://localhost:3000/api/v1/afectados', {
 
 ---
 
+## 📢 Licencia, Forks y Red de Nodos Abierta
+
+¡Esta plataforma pertenece a la comunidad! Animamos activamente a desarrolladores, ONGs, universidades y entusiastas de la tecnología a hacer **Fork** de este repositorio, modificar el código y desplegar su propio nodo (sea público, privado o comunitario). 
+
+### La Única Premisa: Mantener la Interconexión
+
+Eres completamente libre de alterar la interfaz gráfica, cambiar los colores de advertencia, añadir filtros específicos de tu región o ajustar las tecnologías del frontend. Sin embargo, solicitamos que cualquier versión o derivado que desarrolles y pongas en producción **mantenga la premisa de la Red Interconectada**:
+
+1.  **CORS Abierto y Endpoints Públicos:** Conservar los endpoints de consulta de personas (`GET /api/v1/afectados`) 100% abiertos (CORS a `*`) y sin tokens de acceso requeridos para lectura. Esto asegura que la información pueda ser mapeada por cualquier nodo vecino.
+2.  **Facilitar la Integración:** Respetar los contratos de la API y el sistema de API Keys para que otros desarrolladores u ONGs puedan enganchar sus bots de rescate o sincronizadores de datos sin barreras cerradas.
+
+*El impacto humanitario de esta herramienta crece exponencialmente con cada nodo interconectado. ¡Ayúdanos a evitar los silos de información en momentos de crisis!*
+
+---
+
 ## 🤝 Contribuciones y Apoyo
 Buscamos desarrolladores que deseen ayudar a mejorar la resiliencia de la plataforma:
 *   Creación de adaptadores para sincronización P2P offline entre navegadores (WebRTC).
