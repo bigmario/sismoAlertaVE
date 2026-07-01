@@ -1,8 +1,0 @@
-Fíjate que sí lo lo revisé ayer, solo que no había terminado de revisarlo, pero me gustó bastante. Fíjate que está está padre. Eso que pusiste los los números de emergencia se me hizo muy bien para que las personas rápido lo puedan ver YYY, marquen por cualquier situación
-Lo único que sí vi es que como que el backend no está conectado, está guardado todo en local. Y yo lo levanté con docker y pues la base de datos se levantó. Pero no, no hay conexión, todo lo está guardando ahí en local storage
-Otra cosa que sabes que estaría bien
-Ponerle alguna modalidad en la que se conecte a un
-A una base de datos pública
-En supabase dan algunas opciones gratis, citar un giga, sólo hay que implementar reintentos, porque luego yo esas las he usado YY se apagan después de un rato, pero si tú haces reintentos como que se prenden, nomás que tarda un poquito, pero está bien, digamos como para que para las personas que no tengan conocimiento tal vez puedan
-O conectarse todos a una base de datos común y puedan ver de todos, verdad? O sea, no sólo una organización, como que por allá por su cuenta, levanta su nodo y
-Y pues solo su base de datos, sino que a lo mejor se puedan interconectar todos en una base de datos común, verdad? Y que sea opcional para que para que ahí se se globalice más lo de la los reportes de de personas desaparecidas
