@@ -357,8 +357,8 @@ const showOnlyMenores = ref(false);
 const selectedPersona = ref<PersonaAfectada | null>(null);
 
 // Fetch data from local storage
-const loadData = () => {
-  personas.value = apiService.getPersonas();
+const loadData = async () => {
+  personas.value = await apiService.getPersonas();
 };
 
 onMounted(() => {

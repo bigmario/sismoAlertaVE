@@ -444,7 +444,7 @@ const validate = (): boolean => {
 const hasGeneralErrors = computed(() => Object.keys(errors.value).length > 0);
 
 // Form Submit Handler
-const handleSubmit = () => {
+const handleSubmit = async () => {
   if (!validate()) {
     return;
   }
@@ -454,27 +454,32 @@ const handleSubmit = () => {
     ? `[${form.value.venezuelaState}] ${form.value.ultimo_avistamiento_direccion.trim()}`
     : form.value.ultimo_avistamiento_direccion.trim();
 
-  const record = apiService.createPersona({
-    cedula: form.value.cedula.trim() || undefined,
-    nombre: form.value.nombre.trim(),
-    apellido: form.value.apellido.trim(),
-    edad: form.value.edad !== '' ? form.value.edad : undefined,
-    ultimo_avistamiento_direccion: fullAddress,
-    ultimo_avistamiento_lat: form.value.ultimo_avistamiento_lat !== '' ? form.value.ultimo_avistamiento_lat : undefined,
-    ultimo_avistamiento_lng: form.value.ultimo_avistamiento_lng !== '' ? form.value.ultimo_avistamiento_lng : undefined,
-    estado: 'DESAPARECIDO', // default state when first reported
-    descripcion_salud: form.value.descripcion_salud.trim() || undefined,
-    fotos: form.value.fotoUrl.trim() ? [form.value.fotoUrl.trim()] : [],
-    es_menor_no_acompanado: form.value.es_menor_no_acompanado,
-    reportante: {
-      nombre: form.value.reportante_nombre.trim(),
-      telefono: form.value.reportante_telefono.trim(),
-      parentesco: form.value.reportante_parentesco
-    }
-  });
+  try {
+    const record = await apiService.createPersona({
+      cedula: form.value.cedula.trim() || undefined,
+      nombre: form.value.nombre.trim(),
+      apellido: form.value.apellido.trim(),
+      edad: form.value.edad !== '' ? form.value.edad : undefined,
+      ultimo_avistamiento_direccion: fullAddress,
+      ultimo_avistamiento_lat: form.value.ultimo_avistamiento_lat !== '' ? form.value.ultimo_avistamiento_lat : undefined,
+      ultimo_avistamiento_lng: form.value.ultimo_avistamiento_lng !== '' ? form.value.ultimo_avistamiento_lng : undefined,
+      estado: 'DESAPARECIDO', // default state when first reported
+      descripcion_salud: form.value.descripcion_salud.trim() || undefined,
+      fotos: form.value.fotoUrl.trim() ? [form.value.fotoUrl.trim()] : [],
+      es_menor_no_acompanado: form.value.es_menor_no_acompanado,
+      reportante: {
+        nombre: form.value.reportante_nombre.trim(),
+        telefono: form.value.reportante_telefono.trim(),
+        parentesco: form.value.reportante_parentesco
+      }
+    });
 
-  createdRecord.value = record;
-  submitted.value = true;
+    createdRecord.value = record;
+    submitted.value = true;
+  } catch (error) {
+    console.error('Error creating record:', error);
+    alert('Hubo un error al registrar el reporte.');
+  }
 };
 
 // Reset Form

@@ -35,81 +35,67 @@ export interface PersonaAfectada {
   es_menor_no_acompanado?: boolean;
 }
 
-const INITIAL_MOCK_DATA: PersonaAfectada[] = [];
+const BASE_URL = 'http://localhost:3000/api/v1';
 
 export const apiService = {
-  getPersonas(): PersonaAfectada[] {
-    const data = localStorage.getItem('sismoalerta_personas');
-    if (!data) {
-      localStorage.setItem('sismoalerta_personas', JSON.stringify(INITIAL_MOCK_DATA));
-      return INITIAL_MOCK_DATA;
-    }
+  async getPersonas(): Promise<PersonaAfectada[]> {
     try {
-      return JSON.parse(data);
+      const response = await fetch(`${BASE_URL}/afectados?limit=100`);
+      if (!response.ok) return [];
+      const json = await response.json();
+      return json.data || [];
     } catch (e) {
-      localStorage.setItem('sismoalerta_personas', JSON.stringify(INITIAL_MOCK_DATA));
-      return INITIAL_MOCK_DATA;
+      console.error(e);
+      return [];
     }
   },
 
-  savePersonas(personas: PersonaAfectada[]) {
-    localStorage.setItem('sismoalerta_personas', JSON.stringify(personas));
-    // Dispatch a custom event so other components know data changed
+  async createPersona(personaData: Omit<PersonaAfectada, 'id' | 'created_at' | 'updated_at'>): Promise<PersonaAfectada> {
+    const response = await fetch(`${BASE_URL}/afectados`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(personaData),
+    });
+    if (!response.ok) throw new Error('Error al crear persona');
+    const newPersona = await response.json();
     window.dispatchEvent(new Event('sismoalerta-data-updated'));
-  },
-
-  createPersona(personaData: Omit<PersonaAfectada, 'id' | 'created_at' | 'updated_at'>): PersonaAfectada {
-    const personas = this.getPersonas();
-    const newPersona: PersonaAfectada = {
-      ...personaData,
-      id: crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).substring(2, 9),
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-      fotos: personaData.fotos && personaData.fotos.length > 0 && personaData.fotos[0]
-        ? personaData.fotos
-        : [`https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(personaData.nombre + ' ' + personaData.apellido)}`]
-    };
-    personas.unshift(newPersona);
-    this.savePersonas(personas);
     return newPersona;
   },
 
-  updatePersonaEstado(
+  async updatePersonaEstado(
     id: string,
     newEstado: PersonaAfectada['estado'],
     fuente: string,
     motivo: string,
     autorNombre: string,
     autorId?: string
-  ): PersonaAfectada | null {
-    const personas = this.getPersonas();
-    const index = personas.findIndex(p => p.id === id);
-    if (index === -1) return null;
+  ): Promise<PersonaAfectada | null> {
+    const response = await fetch(`${BASE_URL}/afectados/${id}/estado`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        estado: newEstado,
+        fuente,
+        motivo,
+        autor_nombre: autorNombre,
+        autor_id: autorId
+      }),
+    });
+    if (!response.ok) throw new Error('Error al actualizar estado');
+    const updatedPersona = await response.json();
+    window.dispatchEvent(new Event('sismoalerta-data-updated'));
+    return updatedPersona;
+  },
 
-    const persona = personas[index];
-    const estadoAnterior = persona.estado;
-    persona.estado = newEstado;
-    persona.updated_at = new Date().toISOString();
-
-    if (!persona.historial_estados) {
-      persona.historial_estados = [];
-    }
-
-    const hist: HistorialEstado = {
-      id: crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).substring(2, 9),
-      persona_id: id,
-      estado_anterior: estadoAnterior,
-      estado_nuevo: newEstado,
-      fuente,
-      motivo,
-      autor_id: autorId,
-      autor_nombre: autorNombre,
-      created_at: new Date().toISOString()
-    };
-
-    persona.historial_estados.push(hist);
-    personas[index] = persona;
-    this.savePersonas(personas);
-    return persona;
+  async updateMenorNoAcompanado(id: string, es_menor_no_acompanado: boolean): Promise<PersonaAfectada | null> {
+    const response = await fetch(`${BASE_URL}/afectados/${id}/menor-no-acompanado`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ es_menor_no_acompanado }),
+    });
+    if (!response.ok) throw new Error('Error al actualizar menor no acompañado');
+    const updatedPersona = await response.json();
+    window.dispatchEvent(new Event('sismoalerta-data-updated'));
+    return updatedPersona;
   }
 };

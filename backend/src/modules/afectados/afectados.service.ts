@@ -158,6 +158,21 @@ export class AfectadosService {
     return this.findOne(id);
   }
 
+  async updateMenorNoAcompanado(id: string, es_menor_no_acompanado: boolean) {
+    const persona = await this.findOne(id);
+
+    if (persona.es_menor_no_acompanado === es_menor_no_acompanado) {
+      return persona;
+    }
+
+    await this.prisma.personaAfectada.update({
+      where: { id },
+      data: { es_menor_no_acompanado },
+    });
+
+    return this.findOne(id);
+  }
+
   async deactivate(id: string) {
     const persona = await this.findOne(id);
     await this.prisma.personaAfectada.update({

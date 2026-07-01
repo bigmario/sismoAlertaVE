@@ -304,8 +304,8 @@ const quickReason = ref('');
 const actionError = ref('');
 
 // Load active cases
-const loadData = () => {
-  personas.value = apiService.getPersonas();
+const loadData = async () => {
+  personas.value = await apiService.getPersonas();
   // Keep the selected case reference updated
   if (selectedCase.value) {
     const updated = personas.value.find(p => p.id === selectedCase.value!.id);
@@ -400,14 +400,19 @@ const selectCase = (persona: PersonaAfectada) => {
   actionError.value = '';
 };
 
-const toggleMenorFlagInDB = () => {
+const toggleMenorFlagInDB = async () => {
   if (!selectedCase.value) return;
-  const list = apiService.getPersonas();
-  const index = list.findIndex(p => p.id === selectedCase.value!.id);
-  if (index !== -1) {
-    list[index].es_menor_no_acompanado = selectedCase.value!.es_menor_no_acompanado;
-    list[index].updated_at = new Date().toISOString();
-    apiService.savePersonas(list);
+  try {
+    const updated = await apiService.updateMenorNoAcompanado(
+      selectedCase.value.id,
+      selectedCase.value.es_menor_no_acompanado || false
+    );
+    if (updated) {
+      loadData();
+    }
+  } catch (error) {
+    console.error('Error al actualizar bandera de menor no acompañado:', error);
+    alert('No se pudo guardar el cambio en la base de datos.');
   }
 };
 
@@ -426,28 +431,32 @@ const setTargetStatus = (status: PersonaAfectada['estado']) => {
 };
 
 // Confirm state transition
-const confirmTransition = () => {
+const confirmTransition = async () => {
   if (!selectedCase.value || !targetStatus.value) return;
   if (!quickReason.value.trim()) {
     actionError.value = 'Debe indicar la justificación o motivo del cambio.';
     return;
   }
 
-  const updated = apiService.updatePersonaEstado(
-    selectedCase.value.id,
-    targetStatus.value,
-    "Reporte de Campo PC/Bomberos",
-    quickReason.value.trim(),
-    activeRescuer.value.nombre,
-    activeRescuer.value.id
-  );
+  try {
+    const updated = await apiService.updatePersonaEstado(
+      selectedCase.value.id,
+      targetStatus.value,
+      "Reporte de Campo PC/Bomberos",
+      quickReason.value.trim(),
+      activeRescuer.value.nombre,
+      activeRescuer.value.id
+    );
 
-  if (updated) {
-    // Clear selection or update
-    cancelSelection();
-    loadData();
-  } else {
-    actionError.value = 'Ocurrió un error al guardar el cambio en el almacén de datos.';
+    if (updated) {
+      // Clear selection or update
+      cancelSelection();
+      loadData();
+    } else {
+      actionError.value = 'Ocurrió un error al guardar el cambio en el almacén de datos.';
+    }
+  } catch (error) {
+    actionError.value = 'Error de conexión con el backend.';
   }
 };
 

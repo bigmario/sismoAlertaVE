@@ -16,6 +16,7 @@ import { ApiTags, ApiOperation, ApiResponse, ApiHeader, ApiBearerAuth } from '@n
 import { AfectadosService } from './afectados.service';
 import { CreatePersonaAfectadaDto } from './dto/create-persona.dto';
 import { UpdateEstadoDto } from './dto/update-estado.dto';
+import { UpdateMenorDto } from './dto/update-menor.dto';
 import { SearchQueryDto } from './dto/search-query.dto';
 import { RescatistaOrApiKeyGuard } from '../../common/guards/rescatista-or-api-key.guard';
 import { AuthGuard } from '../../common/guards/auth.guard';
@@ -66,6 +67,21 @@ export class AfectadosController {
   ) {
     const authUserId = req.user?.id;
     return this.afectadosService.updateEstado(id, updateEstadoDto, authUserId);
+  }
+
+  @Patch(':id/menor-no-acompanado')
+  @UseGuards(RescatistaOrApiKeyGuard)
+  @ApiOperation({ summary: 'Actualizar flag de menor no acompañado' })
+  @ApiHeader({ name: 'x-api-key', required: false, description: 'API Key de la organización' })
+  @ApiBearerAuth()
+  @ApiResponse({ status: 200, description: 'Flag de menor no acompañado actualizado' })
+  @ApiResponse({ status: 401, description: 'No autorizado' })
+  @ApiResponse({ status: 404, description: 'Persona no encontrada' })
+  updateMenorNoAcompanado(
+    @Param('id') id: string,
+    @Body() updateMenorDto: UpdateMenorDto,
+  ) {
+    return this.afectadosService.updateMenorNoAcompanado(id, updateMenorDto.es_menor_no_acompanado);
   }
 
   @Patch(':id/desactivar')

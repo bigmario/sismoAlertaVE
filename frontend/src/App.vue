@@ -219,8 +219,8 @@ const stats = ref({
   menores: 0
 });
 
-const calculateStats = () => {
-  const records = apiService.getPersonas();
+const calculateStats = async () => {
+  const records = await apiService.getPersonas();
   stats.value = {
     total: records.length,
     desaparecidos: records.filter(p => p.estado === 'DESAPARECIDO').length,
